@@ -1,0 +1,15 @@
+{
+  "scripts": {
+    "dev": "wrangler dev src/index.ts",
+    "docker": "wrangler dev src/index.ts --port 80",
+    "deploy": "wrangler deploy --minify src/index.ts"
+  },
+  "dependencies": {
+    "hono": "^3.2.1",
+    "js-sha3": "^0.8.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20221111.1",
+    "wrangler": "^3.0.0"
+  }
+}
