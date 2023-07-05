@@ -4,13 +4,19 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '20.x'
-  displayName: 'Install Node.js'
+variables:
+- group: production
 
-- script: |
-    npm install
-    npm run deploy
-  displayName: 'Deploy'
+stages:
+- stage: Deploy
+  jobs:
+  - job: CloudflareWorkers
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '20.x'
+      displayName: 'Install Node.js'
+    - script: |
+        npm install
+        npm run deploy
+      displayName: 'Deploy with Wrangler'
