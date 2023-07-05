@@ -4,13 +4,12 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-variables:
-- group: production
-
 stages:
 - stage: Deploy
   jobs:
   - job: CloudflareWorkers
+    variables:
+    - group: production
     steps:
     - task: NodeTool@0
       inputs:
