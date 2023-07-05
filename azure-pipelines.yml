@@ -17,6 +17,7 @@ stages:
         versionSpec: '20.x'
       displayName: 'Install Node.js'
     - script: |
+        env
         npm install
         npm run deploy
       displayName: 'Deploy with Wrangler'
