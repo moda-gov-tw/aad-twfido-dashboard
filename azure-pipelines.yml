@@ -21,3 +21,10 @@ stages:
         npm install
         npm run deploy
       displayName: 'Deploy with Wrangler'
+- stage: Scan
+  jobs:
+  - job: MendBolt
+    steps:
+    - task: WhiteSource@21
+      inputs:
+        cwd: '$(System.DefaultWorkingDirectory)'
