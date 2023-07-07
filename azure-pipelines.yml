@@ -29,3 +29,7 @@ stages:
         cwd: '$(System.DefaultWorkingDirectory)'
     - task: MicrosoftSecurityDevOps@1
       displayName: 'Microsoft Security DevOps'
+  - job: MsSec
+    steps:
+    - task: MicrosoftSecurityDevOps@1
+      displayName: 'Microsoft Security DevOps'
