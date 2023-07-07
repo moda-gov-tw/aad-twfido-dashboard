@@ -27,9 +27,7 @@ stages:
     - task: WhiteSource@21
       inputs:
         cwd: '$(System.DefaultWorkingDirectory)'
-    - task: MicrosoftSecurityDevOps@1
-      displayName: 'Microsoft Security DevOps'
-  - job: MsSec
+  - job: MicrosoftSecurityDevOps
     steps:
     - task: MicrosoftSecurityDevOps@1
       displayName: 'Microsoft Security DevOps'
