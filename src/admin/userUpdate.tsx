@@ -51,7 +51,7 @@ export async function userUpdate(c: any) {
 
   try {
     let r = await fetch(url2, options2);
-    return c.redirect("/");
+    return c.redirect("/admin");
   } catch (err) {
     return c.json({ msg: err });
   }
