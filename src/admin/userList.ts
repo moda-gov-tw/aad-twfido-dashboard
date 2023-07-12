@@ -37,7 +37,7 @@ export async function userList(c: any) {
       return obj;
     });
 
-    return c.json(j);
+    return c.json({"total":800,"totalNotFiltered":800, "rows": j});
   } catch (err) {
     return c.json({ msg: err });
   }

@@ -12,7 +12,11 @@ const Index = (props: any) => {
   return (
     <Layout {...props}>
       <h1 class="pb-2 border-bottom">{props.title}</h1>
-      <table id="table" data-toggle="table" data-url="admin/users.json" data-search="true">
+      <table
+        id="table"
+        data-url="admin/users.json"
+        data-search="true"
+      >
         <thead>
           <tr>
             <th data-field="userPrincipalName" data-sortable="true">
@@ -36,6 +40,28 @@ const Index = (props: any) => {
       </table>
       {html`
         <script>
+          window.onload = function(){
+            const urlParams = new URLSearchParams(window.location.search);
+            let searchText = urlParams.get('searchText');
+            if (searchText == null) {
+              searchText = sessionStorage.getItem("searchText");
+            }
+            $('#table').bootstrapTable({
+              searchText: searchText
+            });
+            setSearchText(searchText);
+            $("input[type=search]").on( "keyup", function() {
+              setSearchText(this.value);
+            });  
+          };
+
+          function setSearchText(value) {
+            const urlParams = new URLSearchParams(window.location.search);
+            urlParams.set('searchText', value);
+            history.pushState({}, null, window.location.pathname + "?" + urlParams);
+            sessionStorage.setItem("searchText", value);
+          }
+          
           function link(value, row) {
             return \`<a href="/admin/\${row.userPrincipalName}">編輯</a>\`;
           }
