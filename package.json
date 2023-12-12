@@ -1,7 +1,7 @@
 {
   "scripts": {
     "dev": "wrangler dev src/index.ts",
-    "start": "wrangler dev src/index.ts --port 80",
+    "start": "wrangler dev src/index.ts --ip 0.0.0.0 --port 80",
     "deploy": "wrangler deploy --minify src/index.ts"
   },
   "dependencies": {
