@@ -1,22 +1,10 @@
-import { Layout } from "../function/layout";
+import { Layout } from "./layout";
 import { html } from "hono/html";
 
-export function userIndex(c: any) {
-  const props = {
-    title: "行動自然人憑證單一登入管理後台",
-  };
-  return c.html(<Index {...props} />);
-}
-
-const Index = (props: any) => {
+export const UsersList = (props: any) => {
   return (
     <Layout {...props}>
-      <h1 class="pb-2 border-bottom">{props.title}</h1>
-      <table
-        id="table"
-        data-url="admin/users.json"
-        data-search="true"
-      >
+      <table id="table" data-url="users/users.json" data-search="true">
         <thead>
           <tr>
             <th data-field="userPrincipalName" data-sortable="true">
@@ -34,36 +22,43 @@ const Index = (props: any) => {
             <th data-field="pwd_expiry" data-sortable="true">
               臨時密碼期限(UTC+0)
             </th>
+            <th data-field="admin" data-sortable="true">
+              管理員
+            </th>
             <th data-formatter="link">編輯</th>
           </tr>
         </thead>
       </table>
       {html`
         <script>
-          window.onload = function(){
+          window.onload = function () {
             const urlParams = new URLSearchParams(window.location.search);
-            let searchText = urlParams.get('searchText');
+            let searchText = urlParams.get("searchText");
             if (searchText == null) {
               searchText = sessionStorage.getItem("searchText");
             }
-            $('#table').bootstrapTable({
-              searchText: searchText
+            $("#table").bootstrapTable({
+              searchText: searchText,
             });
             setSearchText(searchText);
-            $("input[type=search]").on( "keyup", function() {
+            $("input[type=search]").on("keyup", function () {
               setSearchText(this.value);
-            });  
+            });
           };
 
           function setSearchText(value) {
             const urlParams = new URLSearchParams(window.location.search);
-            urlParams.set('searchText', value);
-            history.pushState({}, null, window.location.pathname + "?" + urlParams);
+            urlParams.set("searchText", value);
+            history.pushState(
+              {},
+              null,
+              window.location.pathname + "?" + urlParams
+            );
             sessionStorage.setItem("searchText", value);
           }
-          
+
           function link(value, row) {
-            return \`<a href="/admin/\${row.userPrincipalName}">編輯</a>\`;
+            return \`<a href="/users/\${row.userPrincipalName}">編輯</a>\`;
           }
           function twid(value, row) {
             if (value == "set") {

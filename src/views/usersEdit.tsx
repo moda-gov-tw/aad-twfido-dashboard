@@ -1,47 +1,9 @@
-import { Layout } from "../function/layout";
-import { getAadAccessToken } from "../function/functions";
+import { Layout } from "./layout";
 import { html } from "hono/html";
 
-export async function userEdit(c: any) {
-  const access_token = await getAadAccessToken(c);
-  const mail = c.req.param("mail");
-  const url = `https://graph.microsoft.com/v1.0/users/${mail}?$select=id,displayName,userPrincipalName&$expand=extensions`;
-  const options = {
-    method: "GET",
-    headers: {
-      Authorization: "Bearer " + access_token,
-    },
-  };
-
-  try {
-    const r = await fetch(url, options);
-    const j: any = await r.json();
-    const find = j.extensions.filter((i: any) => i.id == "twfido");
-    let pwd_expiry = null;
-
-    if (find.length > 0) {
-      try {
-        pwd_expiry = find[0].pwd_expiry;
-      } catch (e) {}
-    }
-
-    const props = {
-      title: "編輯使用者",
-      id: j.id,
-      mail: j.userPrincipalName,
-      name: j.displayName,
-      pwd_expiry: pwd_expiry,
-    };
-    return c.html(<Edit {...props} />);
-  } catch (err) {
-    return c.html(err);
-  }
-}
-
-const Edit = (props: any) => {
+export const UsersEdit = (props: any) => {
   return (
     <Layout {...props}>
-      <h1 class="pb-2 mb-4 border-bottom">{props.title}</h1>
       <form method="POST" onsubmit="return validateForm()">
         <div class="row mb-3">
           <label class="col-sm-3 col-form-label">信箱</label>
@@ -51,7 +13,7 @@ const Edit = (props: any) => {
               type="email"
               name="email"
               value={props.mail}
-              readonly="readonly"
+              readonly
             />
           </div>
         </div>
@@ -63,7 +25,7 @@ const Edit = (props: any) => {
               type="text"
               name="name"
               value={props.name}
-              readonly="readonly"
+              readonly
             />
           </div>
         </div>
@@ -101,10 +63,30 @@ const Edit = (props: any) => {
             />
           </div>
         </div>
+        <div class="row mb-3">
+          <label class="col-sm-3 col-form-label">管理員</label>
+          <div class="col-sm-9">
+            {props.admin ? (
+              <input
+                class="form-check-input mt-2"
+                type="checkbox"
+                name="admin"
+                checked
+              />
+            ) : (
+              <input
+                class="form-check-input mt-2"
+                type="checkbox"
+                name="admin"
+              />
+            )}
+          </div>
+        </div>
         <input type="hidden" value={props.id} name="id" />
-        <button class="btn btn-primary" type="submit">
+        <button class="btn btn-success me-2" type="submit">
           送出
         </button>
+        <a href="/users" class="btn btn-light">返回</a>
       </form>
       {html`
         <script>

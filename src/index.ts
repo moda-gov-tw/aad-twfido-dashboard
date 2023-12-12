@@ -1,24 +1,31 @@
 import { Hono } from "hono";
-import { userId } from "./profile/userId";
-import { userIdUpdate } from "./profile/userIdUpdate";
-import { userIndex } from "./admin/userIndex";
-import { userList } from "./admin/userList";
-import { userEdit } from "./admin/userEdit";
-import { userUpdate } from "./admin/userUpdate";
+import { jwt } from "hono/jwt";
+
+import home from "./controllers/home";
+import auth from "./controllers/auth";
+import users from "./controllers/users";
 
 type Bindings = {
   AAD_TENANT_ID: string;
   AAD_CLEINT_ID: string;
   AAD_CLEINT_SECRET: string;
+  JWT_SECRET: string;
+  ADMIN_EMAIL: string;
 };
 
 const app = new Hono<{ Bindings: Bindings }>();
 
-app.get("/", (c) => userId(c));
-app.post("/", (c) => userIdUpdate(c));
-app.get("/admin", (c) => userIndex(c));
-app.get("/admin/users.json", async (c) => await userList(c));
-app.get("/admin/:mail", async(c)=> await userEdit(c));
-app.post("/admin/:mail", async(c)=> await userUpdate(c));
+app.use("/users/*", async (c, next) => {
+  const auth = jwt({
+    secret: c.env.JWT_SECRET,
+    cookie: "JWT",
+  });
+  return await auth(c, next);
+});
+
+app.route("/", home);
+app.route("/auth", auth);
+app.route("/users", users);
+
 
 export default app;
