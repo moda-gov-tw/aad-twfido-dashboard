@@ -4,3 +4,9 @@ services:
     build: .
     ports:
       - 80:80
+    environment:
+      AAD_CLEINT_ID: ${AAD_CLEINT_ID}
+      AAD_CLEINT_SECRET: ${AAD_CLEINT_SECRET}
+      AAD_TENANT_ID: ${AAD_TENANT_ID}
+      JWT_SECRET: ${JWT_SECRET}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
