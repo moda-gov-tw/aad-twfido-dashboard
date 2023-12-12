@@ -10,7 +10,7 @@ npm run dev
 
 ## docker compose
 ```
-cp wrangler.toml.example wrangler.toml
-# 編輯wrangler.toml，填入參數
+cp .env.example .env
+# 編輯 .env，填入參數
 docker-compose up -d 
 ```
