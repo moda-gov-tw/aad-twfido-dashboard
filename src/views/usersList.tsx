@@ -22,6 +22,9 @@ export const UsersList = (props: any) => {
             <th data-field="pwd_expiry" data-sortable="true">
               臨時密碼期限(UTC+0)
             </th>
+            <th data-field="sign" data-sortable="true">
+              簽章憑證
+            </th>
             <th data-field="admin" data-sortable="true">
               管理員
             </th>

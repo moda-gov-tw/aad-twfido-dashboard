@@ -40,11 +40,13 @@ app.get("/users.json", async (c: any) => {
       obj.pwd = "unset";
       obj.pwd_expiry = "";
       obj.admin = "";
+      obj.sign = "";
       try {
         const find = i.extensions.find((k: any) => k.id == "twfido");
         if (find) {
           obj.twid = find.twid ? "set" : "unset";
           obj.pwd = find.pwd ? "set" : "unset";
+          obj.sign = find.sign ? "V" : "";
           obj.pwd_expiry = find.pwd_expiry.replace("T", " ");
           obj.admin = find.admin ? "✅" : "";
         }
@@ -95,13 +97,7 @@ app.post("/:mail", async (c) => {
     admin: boolean;
   }
 
-  const data: Datatype = {
-    twid: null,
-    pwd: null,
-    pwd_expiry: null,
-    admin: false,
-  };
-
+  let data: any = {};
   const access_token = await getAadAccessToken(c);
   const mail = c.req.param("mail");
   const url = `https://graph.microsoft.com/v1.0/users/${mail}/extensions/twfido`;
@@ -117,6 +113,7 @@ app.post("/:mail", async (c) => {
     await createExtension(mail, access_token);
   } else {
     const j: any = await r.json();
+    data = j;
     data.twid = j.twid ?? null;
     data.pwd = j.pwd ?? null;
     data.pwd_expiry = j.pwd_expiry ?? null;
